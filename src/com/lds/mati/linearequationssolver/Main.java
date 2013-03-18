@@ -24,16 +24,19 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String input = "a+b=0 \n 2a+b+c+d=0 \n a+b+2d=0 \n b+c+d=1";
-        if(LinearEquationsSolver.isValidEquations(input)){
+        String input = "a+b=0 \n c=0";
+        if (LinearEquationsSolver.isValidEquations(input)) {
             ArrayList<Map<String, Double>> equations = LinearEquationsSolver.parseEquations(input);
             Map<String, Double> result = LinearEquationsSolver.solveLinearEquations(equations);
-            
-            for(Map.Entry<String,Double> entry : result.entrySet()){
-                System.out.printf("%s = %.4f\n",entry.getKey(),entry.getValue());
+            if (result != null) {
+                for (Map.Entry<String, Double> entry : result.entrySet()) {
+                    System.out.printf("%s = %.4f\n", entry.getKey(), entry.getValue());
+                }
+            } else {
+                System.out.println("Brak zależności między równaniami lub za mało równań.");
             }
-        }
-        else 
+        } else {
             System.err.println("Wprowadzone wyrażenie nie jest układem równań liniowych");
+        }
     }
 }

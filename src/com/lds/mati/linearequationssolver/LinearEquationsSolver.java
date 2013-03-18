@@ -25,8 +25,8 @@ public class LinearEquationsSolver {
     public static Map<String, Double> solveLinearEquations(ArrayList<Map<String, Double>> equations) {
         TreeSet<String> variables = new TreeSet<>();
         Map<String, Double> results = new HashMap<>();
-        Matrix core,equationsResults,solvedEquations;
-        
+        Matrix core, equationsResults, solvedEquations = null;
+
         for (Map<String, Double> equation : equations) {
             variables.addAll(equation.keySet());
         }
@@ -46,7 +46,13 @@ public class LinearEquationsSolver {
             }
             equationsResults.set(i, 0, equation.get("="));
         }
-        solvedEquations = core.inverse().times(equationsResults);
+
+        try {
+            solvedEquations = core.inverse().times(equationsResults);
+        } catch (RuntimeException e) {
+            System.err.println("Macierz nieodwracalna");
+            return null;
+        }
         
         Iterator<String> iter = variables.iterator();
         for (int i = 0; iter.hasNext(); ++i) {
@@ -64,10 +70,10 @@ public class LinearEquationsSolver {
         Pattern data = Pattern.compile(dataMiningRegex);
         Matcher mat2 = data.matcher(input);
         return bigFatEquationAutomata(mat2);
-        
+
     }
 
-    private static ArrayList<Map<String, Double>> bigFatEquationAutomata(Matcher mat2) throws NumberFormatException {
+    private static ArrayList<Map<String, Double>> bigFatEquationAutomata(Matcher mat2) {
         ArrayList<Map<String, Double>> equations = new ArrayList<>();
         double d1, d2, result, result2;
         String var;
